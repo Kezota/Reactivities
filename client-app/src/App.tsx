@@ -29,6 +29,7 @@ function App() {
 
   return (
     <div>
+      <h1>Hello</h1>
       <Header as="h2" icon="users" content="Reactivities" />
       <List>
         {activities.map((activity: TActivity) => (
