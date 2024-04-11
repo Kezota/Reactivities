@@ -14,6 +14,7 @@ type TProps = {
   onFormClose: () => void;
   onCreateOrEditActivity: (activity: TActivity) => void;
   onDeleteActivity: (id: string) => void;
+  submitting: boolean;
 };
 
 export default function ActivityDashboard({
@@ -26,6 +27,7 @@ export default function ActivityDashboard({
   onFormClose,
   onCreateOrEditActivity,
   onDeleteActivity,
+  submitting,
 }: TProps) {
   return (
     <Grid>
@@ -34,6 +36,7 @@ export default function ActivityDashboard({
           activities={activities}
           onSelectActivity={onSelectActivity}
           onDeleteActivity={onDeleteActivity}
+          submitting={submitting}
         />
       </Grid.Column>
       <Grid.Column width="6">
@@ -49,6 +52,7 @@ export default function ActivityDashboard({
             activity={selectedActivity}
             onFormClose={onFormClose}
             onCreateOrEditActivity={onCreateOrEditActivity}
+            submitting={submitting}
           />
         )}
       </Grid.Column>

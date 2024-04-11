@@ -6,12 +6,14 @@ type TProps = {
   activity: TActivity | null;
   onFormClose: () => void;
   onCreateOrEditActivity: (activity: TActivity) => void;
+  submitting: boolean;
 };
 
 export default function ActivityForm({
   activity: selectedActivity,
   onFormClose,
   onCreateOrEditActivity,
+  submitting,
 }: TProps) {
   const initialState = selectedActivity ?? {
     id: "",
@@ -59,6 +61,7 @@ export default function ActivityForm({
         />
         <Form.Input
           placeholder="Date"
+          type="date"
           value={activity.date}
           name="date"
           onChange={handleInputChange}
@@ -76,7 +79,13 @@ export default function ActivityForm({
           onChange={handleInputChange}
         />
 
-        <Button floated="right" positive type="submit" content="Submit" />
+        <Button
+          loading={submitting}
+          floated="right"
+          positive
+          type="submit"
+          content="Submit"
+        />
         <Button
           onClick={() => onFormClose()}
           floated="right"
