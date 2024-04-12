@@ -1,20 +1,17 @@
 import { Button, Form, Segment } from "semantic-ui-react";
-import { TActivity } from "../../../app/models/activity";
 import { ChangeEvent, useState } from "react";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-type TProps = {
-  activity: TActivity | null;
-  onFormClose: () => void;
-  onCreateOrEditActivity: (activity: TActivity) => void;
-  submitting: boolean;
-};
+export default observer(function ActivityForm() {
+  const {
+    selectedActivity,
+    closeForm,
+    createActivity,
+    updateActivity,
+    loading,
+  } = useStore().activityStore;
 
-export default function ActivityForm({
-  activity: selectedActivity,
-  onFormClose,
-  onCreateOrEditActivity,
-  submitting,
-}: TProps) {
   const initialState = selectedActivity ?? {
     id: "",
     title: "",
@@ -24,11 +21,10 @@ export default function ActivityForm({
     city: "",
     venue: "",
   };
-
   const [activity, setActivity] = useState(initialState);
 
   function handleSubmit() {
-    onCreateOrEditActivity(activity);
+    activity.id ? updateActivity(activity) : createActivity(activity);
   }
 
   function handleInputChange(
@@ -80,14 +76,14 @@ export default function ActivityForm({
         />
 
         <Button
-          loading={submitting}
+          loading={loading}
           floated="right"
           positive
           type="submit"
           content="Submit"
         />
         <Button
-          onClick={() => onFormClose()}
+          onClick={() => closeForm()}
           floated="right"
           type="button"
           content="Cancel"
@@ -95,4 +91,4 @@ export default function ActivityForm({
       </Form>
     </Segment>
   );
-}
+});

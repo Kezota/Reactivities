@@ -1,20 +1,12 @@
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { TActivity } from "../../../app/models/activity";
 import { SyntheticEvent, useState } from "react";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-type TProps = {
-  activities: TActivity[];
-  onSelectActivity: (id: string) => void;
-  onDeleteActivity: (id: string) => void;
-  submitting: boolean;
-};
-
-export default function ActivityList({
-  activities,
-  onSelectActivity,
-  onDeleteActivity,
-  submitting,
-}: TProps) {
+export default observer(function ActivityList() {
+  const { activitiesByDate, selectActivity, deleteActivity, loading } =
+    useStore().activityStore;
   const [target, setTarget] = useState("");
 
   function handleActivityDelete(
@@ -22,13 +14,13 @@ export default function ActivityList({
     id: string
   ) {
     setTarget(e.currentTarget.name);
-    onDeleteActivity(id);
+    deleteActivity(id);
   }
 
   return (
     <Segment>
       <Item.Group divided>
-        {activities.map((activity: TActivity) => (
+        {activitiesByDate.map((activity: TActivity) => (
           <Item key={activity.id}>
             <Item.Content>
               <Item.Header as="a">{activity.title}</Item.Header>
@@ -41,14 +33,14 @@ export default function ActivityList({
               </Item.Description>
               <Item.Extra>
                 <Button
-                  onClick={() => onSelectActivity(activity.id)}
+                  onClick={() => selectActivity(activity.id)}
                   floated="right"
                   content="View"
                   color="blue"
                 />
                 <Button
                   name={activity.id}
-                  loading={submitting && target === activity.id}
+                  loading={loading && target === activity.id}
                   onClick={(e) => handleActivityDelete(e, activity.id)}
                   floated="right"
                   content="Delete"
@@ -62,4 +54,4 @@ export default function ActivityList({
       </Item.Group>
     </Segment>
   );
-}
+});

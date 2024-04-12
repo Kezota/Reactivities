@@ -7,43 +7,38 @@ import {
   CardMeta,
   Image,
 } from "semantic-ui-react";
-import { TActivity } from "../../../app/models/activity";
+import { useStore } from "../../../app/stores/store";
 
-type TProps = {
-  activity: TActivity;
-  onCancelSelectActivity: () => void;
-  onFormOpen: (id?: string) => void;
-};
+export default function ActivityDetails() {
+  const { selectedActivity, openForm, cancelSelectedActivity } =
+    useStore().activityStore;
 
-export default function ActivityDetails({
-  activity,
-  onCancelSelectActivity,
-  onFormOpen,
-}: TProps) {
+  if (!selectedActivity) return null;
+
   return (
     <Card fluid>
       <Image
-        src={`/assets/categoryImages/${activity.category}.jpg`}
+        src={`/assets/categoryImages/${selectedActivity.category}.jpg`}
         wrapped
         ui={false}
       />
       <CardContent>
-        <CardHeader>{activity.title}</CardHeader>
+        <CardHeader>{selectedActivity.title}</CardHeader>
         <CardMeta>
-          <span>{activity.date}</span>
+          <span>{selectedActivity.date}</span>
         </CardMeta>
-        <CardDescription>{activity.description}</CardDescription>
+        <CardDescription>{selectedActivity.description}</CardDescription>
       </CardContent>
       <CardContent extra>
         <Button.Group widths="2">
           <Button
-            onClick={() => onFormOpen(activity.id)}
+            onClick={() => openForm(selectedActivity.id)}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={() => onCancelSelectActivity()}
+            onClick={() => cancelSelectedActivity()}
             basic
             color="grey"
             content="Cancel"
