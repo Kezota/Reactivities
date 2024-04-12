@@ -8,37 +8,52 @@ import {
   Image,
 } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
+import { Link, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
-export default function ActivityDetails() {
-  const { selectedActivity, openForm, cancelSelectedActivity } =
-    useStore().activityStore;
+export default observer(function ActivityDetails() {
+  const {
+    selectedActivity: activity,
+    loadActivity,
+    loadingInitial,
+  } = useStore().activityStore;
+  const { id } = useParams();
 
-  if (!selectedActivity) return null;
+  useEffect(() => {
+    if (id) loadActivity(id);
+  }, [id, loadActivity]);
+
+  if (loadingInitial || !activity)
+    return <LoadingComponent content="Loading..." />;
 
   return (
     <Card fluid>
       <Image
-        src={`/assets/categoryImages/${selectedActivity.category}.jpg`}
+        src={`/assets/categoryImages/${activity.category}.jpg`}
         wrapped
         ui={false}
       />
       <CardContent>
-        <CardHeader>{selectedActivity.title}</CardHeader>
+        <CardHeader>{activity.title}</CardHeader>
         <CardMeta>
-          <span>{selectedActivity.date}</span>
+          <span>{activity.date}</span>
         </CardMeta>
-        <CardDescription>{selectedActivity.description}</CardDescription>
+        <CardDescription>{activity.description}</CardDescription>
       </CardContent>
       <CardContent extra>
         <Button.Group widths="2">
           <Button
-            onClick={() => openForm(selectedActivity.id)}
+            as={Link}
+            to={`/manage/${activity.id}`}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={() => cancelSelectedActivity()}
+            as={Link}
+            to="/activities"
             basic
             color="grey"
             content="Cancel"
@@ -47,4 +62,4 @@ export default function ActivityDetails() {
       </CardContent>
     </Card>
   );
-}
+});
