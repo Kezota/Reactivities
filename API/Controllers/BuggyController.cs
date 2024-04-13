@@ -20,7 +20,7 @@ namespace API.Controllers
         [HttpGet("server-error")]
         public ActionResult GetServerError()
         {
-            throw new Exception("This is a server error");
+            return StatusCode(500, "This is a server error");
         }
 
         [HttpGet("unauthorised")]
