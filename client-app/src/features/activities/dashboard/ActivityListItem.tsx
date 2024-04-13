@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button, Icon, Item, Segment } from "semantic-ui-react";
 import { TActivity } from "../../../app/models/activity";
+import { format } from "date-fns";
 
 type TProps = {
   activity: TActivity;
@@ -29,7 +30,7 @@ export default function ActivityListItem({ activity }: TProps) {
       </Segment>
       <Segment>
         <span>
-          <Icon name="clock" /> {activity.date}
+          <Icon name="clock" /> {format(activity.date!, "dd MMM yyyy h:mm aa")}
           <Icon name="marker" /> {activity.venue}
         </span>
       </Segment>
